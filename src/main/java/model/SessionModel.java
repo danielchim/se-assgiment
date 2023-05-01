@@ -53,13 +53,14 @@ public class SessionModel {
     }
 
     public Session getSessionBySessionCode(String sessionCode) {
-        Session session = new Session();
+        Session session = null;
         String sql = "SELECT s.idSession, s.Courses_idCourses, s.weekTime, s.time, s.capacity, s.remainingCapacity FROM courses c INNER JOIN session s ON c.idCourses = s.Courses_idCourses WHERE s.sessionCode = ?";
         try (Connection conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, sessionCode);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
+                    session = new Session();
                     int idSession = rs.getInt("idSession");
                     Courses course = new Courses();
                     course.setIdCourses(rs.getInt("Courses_idCourses"));
