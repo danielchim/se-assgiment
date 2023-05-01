@@ -185,11 +185,15 @@ public class SessionModel {
     }
 
     public boolean hasRegisteredSessionByCourseId(CourseStudentsSessionLink courseStudentsSessionLink) {
-        String sql = "SELECT * FROM courses_students_session_link WHERE Students_idStudents = ? AND Session_idSession = ?";
+        String sql = "SELECT cssl.* FROM courses_students_session_link cssl " +
+                "JOIN session s ON cssl.Session_idSession = s.idSession " +
+                "WHERE cssl.Students_idStudents = ? AND s.Courses_idCourses = ?";
+
         try (Connection conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, courseStudentsSessionLink.getStudent().getIdStudent());
             stmt.setInt(2, courseStudentsSessionLink.getSession().getCourse().getIdCourses());
+
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
