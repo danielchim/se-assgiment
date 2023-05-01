@@ -184,6 +184,20 @@ public class SessionModel {
         return false;
     }
 
+    public boolean hasRegisteredSessionByCourseId(CourseStudentsSessionLink courseStudentsSessionLink) {
+        String sql = "SELECT * FROM courses_students_session_link WHERE Students_idStudents = ? AND Session_idSession = ?";
+        try (Connection conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, courseStudentsSessionLink.getStudent().getIdStudent());
+            stmt.setInt(2, courseStudentsSessionLink.getSession().getCourse().getIdCourses());
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public boolean dropSession(CourseStudentsSessionLink courseStudentsSessionLink) {
         String sql = "DELETE FROM courses_students_session_link WHERE Session_idSession = ? AND Students_idStudents = ?";

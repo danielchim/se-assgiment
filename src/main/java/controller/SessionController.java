@@ -57,6 +57,16 @@ public class SessionController {
     public boolean isStudentReachedMaxRegistrationAmount(String idStudent){
         return sessionModel.countCoursesByStudentId(idStudent) == 3;
     }
+
+    /**
+     * Checks if a student has reached the maximum allowed number of course registrations.
+     *
+     * @param courseStudentsSessionLink The DTO which contains the student ID and course ID inside the session entity.
+     * @return True if the student has reached the maximum number of course registrations, false otherwise.
+     */
+    public boolean hasRegisteredSessionByCourseId(CourseStudentsSessionLink courseStudentsSessionLink){
+        return sessionModel.hasRegisteredSessionByCourseId(courseStudentsSessionLink);
+    }
     /**
      * Drops a student from a session.
      *
